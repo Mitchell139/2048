@@ -58,11 +58,7 @@ KeyboardInputManager.prototype.listen = function () {
     if (!modifiers) {
       if (mapped !== undefined) {
         event.preventDefault();
-        if (
-          !disabledDirections[
-            Object.keys(directions).find((key) => directions[key] === mapped)
-          ]
-        ) {
+        if (!disabledDirections[mapped]) {
           self.emit("move", mapped);
         }
       }
@@ -153,8 +149,7 @@ KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
   button.addEventListener(this.eventTouchend, fn.bind(this));
 };
 
-var disabledDirections = { up: false, down: false, left: false, right: false };
-var directions = { up: 0, right: 1, down: 2, left: 3 };
+var disabledDirections = { 0: false, 1: false, 2: false, 3: false };
 
 function disableSwipe(direction) {
   disabledDirections[direction] = !disabledDirections[direction];
