@@ -3,13 +3,13 @@ function KeyboardInputManager() {
 
   if (window.navigator.msPointerEnabled) {
     //Internet Explorer 10 style
-    this.eventTouchstart    = "MSPointerDown";
-    this.eventTouchmove     = "MSPointerMove";
-    this.eventTouchend      = "MSPointerUp";
+    this.eventTouchstart = "MSPointerDown";
+    this.eventTouchmove = "MSPointerMove";
+    this.eventTouchend = "MSPointerUp";
   } else {
-    this.eventTouchstart    = "touchstart";
-    this.eventTouchmove     = "touchmove";
-    this.eventTouchend      = "touchend";
+    this.eventTouchstart = "touchstart";
+    this.eventTouchmove = "touchmove";
+    this.eventTouchend = "touchend";
   }
 
   this.listen();
@@ -46,19 +46,25 @@ KeyboardInputManager.prototype.listen = function () {
     87: 0, // W
     68: 1, // D
     83: 2, // S
-    65: 3  // A
+    65: 3, // A
   };
 
   // Respond to direction keys
   document.addEventListener("keydown", function (event) {
-    var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
-                    event.shiftKey;
-    var mapped    = map[event.which];
+    var modifiers =
+      event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+    var mapped = map[event.which];
 
     if (!modifiers) {
       if (mapped !== undefined) {
         event.preventDefault();
-        self.emit("move", mapped);
+        if (
+          !disabledDirections[
+            Object.keys(directions).find((key) => directions[key] === mapped)
+          ]
+        ) {
+          self.emit("move", mapped);
+        }
       }
     }
 
@@ -78,8 +84,10 @@ KeyboardInputManager.prototype.listen = function () {
   var gameContainer = document.getElementsByClassName("game-container")[0];
 
   gameContainer.addEventListener(this.eventTouchstart, function (event) {
-    if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
-        event.targetTouches.length > 1) {
+    if (
+      (!window.navigator.msPointerEnabled && event.touches.length > 1) ||
+      event.targetTouches.length > 1
+    ) {
       return; // Ignore if touching with more than 1 finger
     }
 
@@ -99,8 +107,10 @@ KeyboardInputManager.prototype.listen = function () {
   });
 
   gameContainer.addEventListener(this.eventTouchend, function (event) {
-    if ((!window.navigator.msPointerEnabled && event.touches.length > 0) ||
-        event.targetTouches.length > 0) {
+    if (
+      (!window.navigator.msPointerEnabled && event.touches.length > 0) ||
+      event.targetTouches.length > 0
+    ) {
       return; // Ignore if still touching with one or more fingers
     }
 
@@ -122,7 +132,7 @@ KeyboardInputManager.prototype.listen = function () {
 
     if (Math.max(absDx, absDy) > 10) {
       // (right : left) : (down : up)
-      self.emit("move", absDx > absDy ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0));
+      self.emit("move", absDx > absDy ? (dx > 0 ? 1 : 3) : dy > 0 ? 2 : 0);
     }
   });
 };
@@ -142,3 +152,10 @@ KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
   button.addEventListener("click", fn.bind(this));
   button.addEventListener(this.eventTouchend, fn.bind(this));
 };
+
+var disabledDirections = { up: false, down: false, left: false, right: false };
+var directions = { up: 0, right: 1, down: 2, left: 3 };
+
+function disableSwipe(direction) {
+  disabledDirections[direction] = !disabledDirections[direction];
+}
