@@ -643,6 +643,10 @@ hr {
   margin: 5px;
 }
 
+.disable-active {
+  background-color: #bbada0;
+}
+
 .game-explanation {
   margin-top: 50px;
 }

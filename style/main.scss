@@ -492,6 +492,10 @@ hr {
   margin: 5px;
 }
 
+.disable-active {
+  background-color: $game-container-background;
+}
+
 .game-explanation {
   margin-top: 50px;
 }

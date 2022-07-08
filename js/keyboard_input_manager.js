@@ -153,4 +153,11 @@ var disabledDirections = { 0: false, 1: false, 2: false, 3: false };
 
 function disableSwipe(direction) {
   disabledDirections[direction] = !disabledDirections[direction];
+
+  if (disabledDirections[direction]) {
+    document.getElementById(direction).className =
+      "disable-swipe disable-active";
+  } else {
+    document.getElementById(direction).className = "disable-swipe";
+  }
 }
