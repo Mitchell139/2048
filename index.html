@@ -6,6 +6,7 @@
 
     <link href="style/main.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="meta/apple-touch-icon.png" />
     <link
       rel="apple-touch-startup-image"
@@ -28,6 +29,7 @@
       name="viewport"
       content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui"
     />
+    <meta name="theme-color" content="#edc22e" />
   </head>
   <body>
     <div class="container">
@@ -124,6 +126,9 @@
       </p>
     </div>
 
+    <script>
+      navigator.serviceWorker.register("sw.js");
+    </script>
     <script src="js/bind_polyfill.js"></script>
     <script src="js/classlist_polyfill.js"></script>
     <script src="js/animframe_polyfill.js"></script>
